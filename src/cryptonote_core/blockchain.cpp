@@ -792,13 +792,14 @@ difficulty_type Blockchain::get_difficulty_for_next_block()
   size_t difficult_block_count;
 
   // pick DIFFICULTY_BLOCKS_COUNT based on version
-  if (get_current_hard_fork_version() < 2) {
-    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT;
-  } else if(get_current_hard_fork_version() <= 11) {
-    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V2;
-  } 
+  if(get_current_hard_fork_version() < 2){
+    difficult_block_count = DIFFICULTY_BLOCKS_COUNT;
+  }
+  else if(get_current_hard_fork_version() <= 11){
+    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V2;
+  }
   else{
-    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V12;
+    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V12;
   }
   if(HARD_FORK_SPLIT == 1)
   {
@@ -873,12 +874,14 @@ size_t offset = height - std::min < size_t >(height, static_cast<size_t>(difficu
  
   // calculate the difficulty target for the block and return it
   size_t target = DIFFICULTY_TARGET;
-  size_t targetV2 = DIFFICULTY_TARGET_V2
+  size_t targetV2 = DIFFICULTY_TARGET_V2;
   if(get_current_hard_fork_version() < 2){
     return next_difficulty(timestamps, difficulties, target);
-  } else if(get_current_hard_fork_version() < 9){
+  } 
+  else if(get_current_hard_fork_version() < 9){
     return next_difficulty_v2(timestamps, difficulties, targetV2);
-  } else if(get_current_hard_fork_version() <= 11){
+  } 
+  else if(get_current_hard_fork_version() <= 11){
     return next_difficulty_v3(timestamps, difficulties, targetV2);
   }
   else{
@@ -1097,7 +1100,7 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
 
   // calculate the difficulty target for the block and return it
   size_t target = DIFFICULTY_TARGET;
-  size_t targetV2 = DIFFICULTY_TARGET_V2
+  size_t targetV2 = DIFFICULTY_TARGET_V2;
   if(get_current_hard_fork_version() < 2){
     return next_difficulty(timestamps, cumulative_difficulties, target);
   } else if(get_current_hard_fork_version() < 9){
