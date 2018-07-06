@@ -69,6 +69,25 @@
  *
  */
 
+#define ELECTRONERO_HARDFORK ((uint64_t)(310787)) 
+#define MAINNET_HARDFORK_V1_HEIGHT ((uint64_t)(1)) // MAINNET v1 
+#define MAINNET_HARDFORK_V7_HEIGHT ((uint64_t)(307003)) // MAINNET v7 hard fork 
+#define MAINNET_HARDFORK_V8_HEIGHT ((uint64_t)(307054)) // MAINNET v8 hard fork 
+#define MAINNET_HARDFORK_V9_HEIGHT ((uint64_t)(308110)) // MAINNET v9 hard fork 
+#define MAINNET_HARDFORK_V10_HEIGHT ((uint64_t)(310790)) // MAINNET v10 hard fork 
+#define MAINNET_HARDFORK_V11_HEIGHT ((uint64_t)(310860)) // MAINNET v11 hard fork -- 70 blocks difference from 10
+#define MAINNET_HARDFORK_V12_HEIGHT ((uint64_t)(333690)) // MAINNET v12 hard fork 
+#define MAINNET_HARDFORK_V13_HEIGHT ((uint64_t)(337496)) // MAINNET v13 hard fork 
+
+#define TESTNET_ELECTRONERO_HARDFORK ((uint64_t)(12746)) // Electronero TESTNET fork height
+#define TESTNET_HARDFORK_V1_HEIGHT ((uint64_t)(1)) // TESTNET v1 
+#define TESTNET_HARDFORK_V7_HEIGHT ((uint64_t)(3)) // TESTNET v7 hard fork 
+#define TESTNET_HARDFORK_V8_HEIGHT ((uint64_t)(57)) // TESTNET v8 hard fork 
+#define TESTNET_HARDFORK_V9_HEIGHT ((uint64_t)(4313)) // TESTNET v9 hard fork
+#define TESTNET_HARDFORK_V10_HEIGHT ((uint64_t)(4357)) // TESTNET v10 hard fork
+#define TESTNET_HARDFORK_V11_HEIGHT ((uint64_t)(12308)) // TESTNET v11 hard fork
+#define TESTNET_HARDFORK_V12_HEIGHT ((uint64_t)(12775)) // TESTNET v12 hard fork
+
 using namespace cryptonote;
 using epee::string_tools::pod_to_hex;
 extern "C" void slow_hash_allocate_state();
@@ -89,16 +108,28 @@ static const struct {
 }
 mainnet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, 1, 0, 1341378000 },
- 
-  // Version 2 starts from block 67500, fork time decided on 2018-03-09
-  { 2, 67500, 0, 1520584977 },
+  { 1, MAINNET_HARDFORK_V1_HEIGHT, 0, 1509360534 },
 
-  // Version 3 starts from block 100800, fork time decided on 2018-04-01 
-  { 3, 100800, 0, 1522557835 },
+  // version 6 was tested but decided against implementation
+  // { 6, MAINNET_HARDFORK_V6_HEIGHT, 0, 1524279224 },
 
-  // Version 4 starts from block 194600, fork time decided about midday UTC on 2018-06-08
-  { 4, 194600, 0, 1522557836 },
+  // version 7 starts from block 307003, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 7, MAINNET_HARDFORK_V7_HEIGHT, 0, 1527663660 },
+	
+  // version 8 starts from block 307054, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 8, MAINNET_HARDFORK_V8_HEIGHT, 0, 1527664267 },
+  
+  // version 9 starts from block 308110, which is on or around the 31st of May, 2018. Fork time finalised on 2018-05-31.
+  { 9, MAINNET_HARDFORK_V9_HEIGHT, 0, 1527780225 },
+	
+  // version 10 starts from block 310757, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 10, MAINNET_HARDFORK_V10_HEIGHT, 0, 1528100874 },
+  // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 11, MAINNET_HARDFORK_V11_HEIGHT, 0, 1528100953 },
+  // Version 12 starts from 333690
+  { 12, MAINNET_HARDFORK_V12_HEIGHT, 0, 1528100954 },
+  // Version 13
+  { 13, MAINNET_HARDFORK_V13_HEIGHT, 0, 1530783171 }
 
 };
 static const uint64_t mainnet_hard_fork_version_1_till = (uint64_t)-1;
@@ -110,17 +141,13 @@ static const struct {
   time_t time;
 } testnet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, 1, 0, 1341378000 },
-
-  // version 2 starts from block 624634, which is on or around the 23rd of November, 2015. Fork time finalised on 2015-11-20. No fork voting occurs for the v2 fork.
-  //{ 2, 624634, 0, 1445355000 },
-
-  // versions 3-5 were passed in rapid succession from September 18th, 2016
-  //{ 3, 800500, 0, 1472415034 },
-  //{ 4, 801219, 0, 1472415035 },
-  //{ 5, 802660, 0, 1472415036 + 86400*180 }, // add 5 months on testnet to shut the update warning up since there's a large gap to v6
-
-  //{ 6, 971400, 0, 1501709789 },
+  { 1, 1, 0, 1509360534 },
+  { 7, TESTNET_HARDFORK_V7_HEIGHT, 0, 1526030397 },
+  { 8, TESTNET_HARDFORK_V8_HEIGHT, 0, 1526030997 },
+  { 9, TESTNET_HARDFORK_V9_HEIGHT, 0, 1526625013 },
+  { 10, TESTNET_HARDFORK_V10_HEIGHT, 0, 1526625163 },
+  { 11, TESTNET_HARDFORK_V11_HEIGHT, 0, 1527566303 },
+  { 12, TESTNET_HARDFORK_V12_HEIGHT, 0, 1527629571 }
 };
 static const uint64_t testnet_hard_fork_version_1_till = (uint64_t)-1;
 
@@ -365,9 +392,9 @@ bool Blockchain::init(BlockchainDB* db, const bool testnet, const cryptonote::te
   uint64_t top_block_timestamp = m_db->get_top_block_timestamp();
   uint64_t timestamp_diff = time(NULL) - top_block_timestamp;
 
-  // genesis block has no timestamp, could probably change it to have timestamp of 1341378000...
+  // genesis block has no timestamp, could probably change it to have timestamp of 1509360533...
   if(!top_block_timestamp)
-    timestamp_diff = time(NULL) - 1341378000;
+    timestamp_diff = time(NULL) - 1509360533;
 
   // create general purpose async service queue
 
@@ -383,6 +410,53 @@ bool Blockchain::init(BlockchainDB* db, const bool testnet, const cryptonote::te
 
   MINFO("Blockchain initialized. last block: " << m_db->height() - 1 << ", " << epee::misc_utils::get_time_interval_string(timestamp_diff) << " time ago, current difficulty: " << get_difficulty_for_next_block());
   m_db->block_txn_stop();
+	
+  uint64_t num_popped_blocks = 0;
+  while (true)
+  {
+    const uint64_t top_height = m_db->height() - 1;
+    const crypto::hash top_id = m_db->top_block_hash();
+    const block top_block = m_db->get_top_block();
+    const uint8_t ideal_hf_version = get_ideal_hard_fork_version(top_height);
+    if (ideal_hf_version <= 1 || ideal_hf_version == top_block.major_version)
+    {
+      if (num_popped_blocks > 0)
+        MGINFO("Initial popping done, top block: " << top_id << ", top height: " << top_height << ", block version: " << (uint64_t)top_block.major_version);
+      break;
+    }
+    else
+    {
+      if (num_popped_blocks == 0)
+        MGINFO("Current top block " << top_id << " at height " << top_height << " has version " << (uint64_t)top_block.major_version << " which disagrees with the ideal version " << (uint64_t)ideal_hf_version);
+      if (num_popped_blocks % 100 == 0)
+        MGINFO("Popping blocks... " << top_height);
+      ++num_popped_blocks;
+      block popped_block;
+      std::vector<transaction> popped_txs;
+      try
+      {
+        m_db->pop_block(popped_block, popped_txs);
+      }
+      // anything that could cause this to throw is likely catastrophic,
+      // so we re-throw
+      catch (const std::exception& e)
+      {
+        MERROR("Error popping block from blockchain: " << e.what());
+        throw;
+      }
+      catch (...)
+      {
+        MERROR("Error popping block from blockchain, throwing!");
+        throw;
+      }
+    }
+  }
+  if (num_popped_blocks > 0)
+  {
+    m_timestamps_and_difficulties_height = 0;
+    m_hardfork->reorganize_from_chain_height(get_current_blockchain_height());
+    m_tx_pool.on_blockchain_dec(m_db->height()-1, get_tail_id());
+  }
 
   update_next_cumulative_size_limit();
   return true;
@@ -525,6 +599,11 @@ block Blockchain::pop_block_from_blockchain()
       }
     }
   }
+  m_blocks_longhash_table.clear();		
+  m_scan_table.clear();		
+  m_blocks_txs_check.clear();		
+  m_check_txin_table.clear();
+	
   update_next_cumulative_size_limit();
   m_tx_pool.on_blockchain_dec(m_db->height()-1, get_tail_id());
 
@@ -709,18 +788,48 @@ difficulty_type Blockchain::get_difficulty_for_next_block()
   std::vector<uint64_t> timestamps;
   std::vector<difficulty_type> difficulties;
   auto height = m_db->height();
-  //size_t difficult_block_count = get_current_hard_fork_version() < 2 ? DIFFICULTY_BLOCKS_COUNT : DIFFICULTY_BLOCKS_COUNT_V3;
 
   size_t difficult_block_count;
 
-  if(get_current_hard_fork_version() < 2){
-    difficult_block_count = DIFFICULTY_BLOCKS_COUNT;
-  }
-  else if(get_current_hard_fork_version() < 4){
-    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V3;
-  }
+  // pick DIFFICULTY_BLOCKS_COUNT based on version
+  if (get_current_hard_fork_version() < 2) {
+    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT;
+  } else if(get_current_hard_fork_version() <= 11) {
+    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V2;
+  } 
   else{
-    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V4;
+    difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V12;
+  }
+  if(HARD_FORK_SPLIT == 1)
+  {
+  if ((uint64_t)height >= MAINNET_HARDFORK_V7_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V7_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V2)
+  {
+  return (difficulty_type) 72289156;// 72289156
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V8_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V8_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V2)
+  {
+  return (difficulty_type) 72289156;
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V9_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V9_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V2)
+  {
+  return (difficulty_type) 72289156;
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V10_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V10_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V2)
+  {
+  return (difficulty_type) 72289156;
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V11_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V11_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V2)
+  {
+  return (difficulty_type) 72289156;
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V12_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V12_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V12)
+  {
+  return (difficulty_type) 72289156;
+  }
+  if ((uint64_t)height >= MAINNET_HARDFORK_V13_HEIGHT - 1 && (uint64_t)height <= MAINNET_HARDFORK_V13_HEIGHT + (uint64_t)DIFFICULTY_BLOCKS_COUNT_V12)
+  {
+  return (difficulty_type) 72289156;
+  }
   }
 
 // ND: Speedup
@@ -761,17 +870,19 @@ size_t offset = height - std::min < size_t >(height, static_cast<size_t>(difficu
     m_timestamps = timestamps;
     m_difficulties = difficulties;
   }
+ 
+  // calculate the difficulty target for the block and return it
   size_t target = DIFFICULTY_TARGET;
-  //return get_current_hard_fork_version() < 2 ? next_difficulty(timestamps, difficulties, target) : next_difficulty_v3(timestamps, difficulties, target, true);
-
+  size_t targetV2 = DIFFICULTY_TARGET_V2
   if(get_current_hard_fork_version() < 2){
     return next_difficulty(timestamps, difficulties, target);
-  }
-  if(get_current_hard_fork_version() < 4){
-    return next_difficulty_v3(timestamps, difficulties, target, true);
+  } else if(get_current_hard_fork_version() < 9){
+    return next_difficulty_v2(timestamps, difficulties, targetV2);
+  } else if(get_current_hard_fork_version() <= 11){
+    return next_difficulty_v3(timestamps, difficulties, targetV2);
   }
   else{
-    return next_difficulty_v4(timestamps, difficulties, target);
+    return next_difficulty_v4(timestamps, difficulties, targetV2);
   }
 
 }
@@ -921,18 +1032,17 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
   LOG_PRINT_L3("Blockchain::" << __func__);
   std::vector<uint64_t> timestamps;
   std::vector<difficulty_type> cumulative_difficulties;
-  //size_t difficult_block_count = get_current_hard_fork_version() < 2 ? DIFFICULTY_BLOCKS_COUNT : DIFFICULTY_BLOCKS_COUNT_V3;
 
   size_t difficult_block_count;
 
   if(get_current_hard_fork_version() < 2){
     difficult_block_count = DIFFICULTY_BLOCKS_COUNT;
   }
-  else if(get_current_hard_fork_version() < 4){
-    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V3;
+  else if(get_current_hard_fork_version() <= 11){
+    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V2;
   }
   else{
-    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V4;
+    difficult_block_count = DIFFICULTY_BLOCKS_COUNT_V12;
   }
 
   // if the alt chain isn't long enough to calculate the difficulty target
@@ -985,22 +1095,18 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
     }
   }
 
-  // FIXME: This will fail if fork activation heights are subject to voting
-  size_t target = DIFFICULTY_TARGET;
-
   // calculate the difficulty target for the block and return it
-  //return get_current_hard_fork_version() < 2 ?
-  //next_difficulty(timestamps, cumulative_difficulties, target) :
-  //next_difficulty_v3(timestamps, cumulative_difficulties, target, true);
-
+  size_t target = DIFFICULTY_TARGET;
+  size_t targetV2 = DIFFICULTY_TARGET_V2
   if(get_current_hard_fork_version() < 2){
     return next_difficulty(timestamps, cumulative_difficulties, target);
-  }
-  if(get_current_hard_fork_version() < 4){
-    return next_difficulty_v3(timestamps, cumulative_difficulties, target, true);
+  } else if(get_current_hard_fork_version() < 9){
+    return next_difficulty_v2(timestamps, cumulative_difficulties, targetV2);
+  } else if(get_current_hard_fork_version() <= 11){
+    return next_difficulty_v3(timestamps, cumulative_difficulties, targetV2);
   }
   else{
-    return next_difficulty_v4(timestamps, cumulative_difficulties, target);
+    return next_difficulty_v4(timestamps, cumulative_difficulties, targetV2);
   }
 }
 //------------------------------------------------------------------
@@ -1039,6 +1145,7 @@ bool Blockchain::prevalidate_miner_transaction(const block& b, uint64_t height)
 bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_block_size, uint64_t fee, uint64_t& base_reward, uint64_t already_generated_coins, bool &partial_block_reward, uint8_t version)
 {
   LOG_PRINT_L3("Blockchain::" << __func__);
+  uint64_t block_height = m_db->height() - 1;
   //validate reward
   uint64_t money_in_use = 0;
   for (auto& o: b.miner_tx.vout)
@@ -1056,7 +1163,7 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
 
   std::vector<size_t> last_blocks_sizes;
   get_last_n_blocks_sizes(last_blocks_sizes, CRYPTONOTE_REWARD_BLOCKS_WINDOW);
-  if (!get_block_reward(epee::misc_utils::median(last_blocks_sizes), cumulative_block_size, already_generated_coins, base_reward, version))
+  if (!get_block_reward(epee::misc_utils::median(last_blocks_sizes), cumulative_block_size, already_generated_coins, base_reward, block_height, version))
   {
     MERROR_VER("block size " << cumulative_block_size << " is bigger than allowed for this blockchain");
     return false;
@@ -2521,7 +2628,8 @@ bool Blockchain::check_tx_inputs(transaction& tx, tx_verification_context &tvc, 
   {
     size_t n_unmixable = 0, n_mixable = 0;
     size_t mixin = std::numeric_limits<size_t>::max();
-    const size_t min_mixin = hf_version >= HF_VERSION_MIN_MIXIN_4 ? 4 : 2;
+    const size_t min_mixin = MIN_MIXIN;
+    const size_t max_mixin = MAX_MIXIN;
     for (const auto& txin : tx.vin)
     {
       // non txin_to_key inputs will be rejected below
@@ -2561,6 +2669,21 @@ bool Blockchain::check_tx_inputs(transaction& tx, tx_verification_context &tvc, 
       if (n_mixable > 1)
       {
         MERROR_VER("Tx " << get_transaction_hash(tx) << " has too low ring size (" << (mixin + 1) << "), and more than one mixable input with unmixable inputs");
+        tvc.m_low_mixin = true;
+        return false;
+      }
+    }
+    if (mixin > max_mixin)
+    {
+      if (n_unmixable == 0)
+      {
+        MERROR_VER("Tx " << get_transaction_hash(tx) << " could not mix, try again with a smaller ring size for this transaction (" << (mixin + 1) << ")");
+        tvc.m_low_mixin = true;
+        return false;
+      }
+      if (n_mixable > 1)
+      {
+        MERROR_VER("Tx " << get_transaction_hash(tx) << " mixin too large, ring size is too high (" << (mixin + 1) << ")");
         tvc.m_low_mixin = true;
         return false;
       }
@@ -2907,12 +3030,12 @@ uint64_t Blockchain::get_dynamic_per_kb_fee(uint64_t block_reward, size_t median
 
   uint64_t unscaled_fee_per_kb = (fee_per_kb_base * min_block_size / median_block_size);
   uint64_t hi, lo = mul128(unscaled_fee_per_kb, block_reward, &hi);
-  static_assert(DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD % 1000000 == 0, "DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD must be divisible by 1000000");
-  static_assert(DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD / 1000000 <= std::numeric_limits<uint32_t>::max(), "DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD is too large");
+  static_assert(DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD % 5 == 0, "DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD must be divisible by 1000000");
+  static_assert(DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD / 5 <= std::numeric_limits<uint32_t>::max(), "DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD is too large");
 
   // divide in two steps, since the divisor must be 32 bits, but DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD isn't
-  div128_32(hi, lo, DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD / 1000000, &hi, &lo);
-  div128_32(hi, lo, 1000000, &hi, &lo);
+  div128_32(hi, lo, DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD / 5, &hi, &lo);
+  div128_32(hi, lo, 5, &hi, &lo);
   assert(hi == 0);
 
   // quantize fee up to 8 decimals
@@ -2927,18 +3050,18 @@ uint64_t Blockchain::get_dynamic_per_kb_fee(uint64_t block_reward, size_t median
 bool Blockchain::check_fee(size_t blob_size, uint64_t fee) const
 {
   const uint8_t version = get_current_hard_fork_version();
-
+  uint64_t block_height = m_db->height() - 1;
   uint64_t fee_per_kb;
   if (version < HF_VERSION_DYNAMIC_FEE)
   {
-    fee_per_kb = version >= 4 ? FEE_PER_KB_V4 : FEE_PER_KB;
+    fee_per_kb = FEE_PER_KB;
   }
   else
   {
     uint64_t median = m_current_block_cumul_sz_limit / 2;
     uint64_t already_generated_coins = m_db->height() ? m_db->get_block_already_generated_coins(m_db->height() - 1) : 0;
     uint64_t base_reward;
-    if (!get_block_reward(median, 1, already_generated_coins, base_reward, version))
+    if (!get_block_reward(median, 1, already_generated_coins, base_reward, block_height, version))
       return false;
     fee_per_kb = get_dynamic_per_kb_fee(base_reward, median, version);
   }
@@ -2960,13 +3083,13 @@ bool Blockchain::check_fee(size_t blob_size, uint64_t fee) const
 uint64_t Blockchain::get_dynamic_per_kb_fee_estimate(uint64_t grace_blocks) const
 {
   const uint8_t version = get_current_hard_fork_version();
-
+  uint64_t block_height = m_db->height() - 1;
   if (version < HF_VERSION_DYNAMIC_FEE){
-	if(version < 4){
+	if(version < 15){
 	return FEE_PER_KB;
 	}
 	else{
-	return FEE_PER_KB_V4;
+	return FEE_PER_KB_V2;
 	}
   }
   if (grace_blocks >= CRYPTONOTE_REWARD_BLOCKS_WINDOW)
@@ -2984,7 +3107,7 @@ uint64_t Blockchain::get_dynamic_per_kb_fee_estimate(uint64_t grace_blocks) cons
 
   uint64_t already_generated_coins = m_db->height() ? m_db->get_block_already_generated_coins(m_db->height() - 1) : 0;
   uint64_t base_reward;
-  if (!get_block_reward(median, 1, already_generated_coins, base_reward, version))
+  if (!get_block_reward(median, 1, already_generated_coins, base_reward, block_height, version))
   {
     MERROR("Failed to determine block reward, using placeholder " << print_money(BLOCK_REWARD_OVERESTIMATE) << " as a high bound");
     base_reward = BLOCK_REWARD_OVERESTIMATE;
@@ -3102,7 +3225,7 @@ uint8_t hf_version = get_current_hard_fork_version();
   if(get_current_hard_fork_version() < 2){
     cryptonote_block_future_time_limit = CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT;
   }
-  else if(get_current_hard_fork_version() < 4){
+  else if(get_current_hard_fork_version() < 9){
     cryptonote_block_future_time_limit = CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2;
   }
   else{
@@ -3513,7 +3636,46 @@ leave:
   // coins will eventually exceed MONEY_SUPPLY and overflow a uint64. To prevent overflow, cap already_generated_coins
   // at MONEY_SUPPLY. already_generated_coins is only used to compute the block subsidy and MONEY_SUPPLY yields a
   // subsidy of 0 under the base formula and therefore the minimum subsidy >0 in the tail state.
-  already_generated_coins = base_reward < (MONEY_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY;
+  uint8_t version = get_current_hard_fork_version();
+  // TESTNET, STAGENET and MAINNET
+  if (m_nettype == TESTNET)
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v6 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  uint64_t TOKEN_SUPPLY = version < 7 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (version < 6) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (TOKEN_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : TOKEN_SUPPLY ;
+  }
+  }
+  else if (m_nettype == STAGENET)
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v2 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  // uint64_t TOKEN_SUPPLY = version < 2 ? MONEY_SUPPLY_ETN : MONEY_SUPPLY;
+  uint64_t TOKEN_SUPPLY = version < 7 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (version < 2) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (TOKEN_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : TOKEN_SUPPLY ;
+  }
+  }
+  else
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v6 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  // uint64_t TOKEN_SUPPLY = version < 6 ? MONEY_SUPPLY_ETN : MONEY_SUPPLY;
+  uint64_t TOKEN_SUPPLY = version < 7 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (version < 6) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (TOKEN_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : TOKEN_SUPPLY ;
+  }
+  }
   if(m_db->height())
     cumulative_difficulty += m_db->get_block_cumulative_difficulty(m_db->height() - 1);
 
