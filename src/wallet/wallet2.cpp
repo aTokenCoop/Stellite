@@ -3479,6 +3479,7 @@ uint64_t wallet2::get_fee_multiplier(uint32_t priority, int fee_algorithm)
   static const uint64_t old_multipliers[3] = {1, 2, 3};
   static const uint64_t new_multipliers[3] = {1, 20, 166};
   static const uint64_t newer_multipliers[4] = {1, 4, 20, 166};
+  static const uint64_t etnx_multipliers[4] = {1, 2, 4, 8};
 
   if (fee_algorithm == -1)
     fee_algorithm = get_fee_algorithm();
@@ -3503,6 +3504,7 @@ uint64_t wallet2::get_fee_multiplier(uint32_t priority, int fee_algorithm)
       case 0: return old_multipliers[priority-1];
       case 1: return new_multipliers[priority-1];
       case 2: return newer_multipliers[priority-1];
+      case 3: return etnx_multipliers[priority-1];
       default: THROW_WALLET_EXCEPTION_IF (true, error::invalid_priority);
     }
   }
@@ -3526,9 +3528,9 @@ uint64_t wallet2::get_per_kb_fee()
   bool use_dyn_fee = use_fork_rules(HF_VERSION_DYNAMIC_FEE, -720 * 1);
   if (!use_dyn_fee){
 
-	bool v4 = use_fork_rules(4, 0);
-	if(v4){
-	return FEE_PER_KB_V4;
+	bool v15 = use_fork_rules(15, 0);
+	if(v15){
+	return FEE_PER_KB;
 	}
 	else{
 	return FEE_PER_KB;
@@ -3540,7 +3542,9 @@ uint64_t wallet2::get_per_kb_fee()
 //----------------------------------------------------------------------------------------------------
 int wallet2::get_fee_algorithm()
 {
-  // changes at v3 and v5
+  // changes at v8, v10, and 14 days before v11
+  if(use_fork_rules(11, -720 * 14)){
+    return 3;}
   if (use_fork_rules(5, 0)){
     return 2;}
   if (use_fork_rules(6, -720 * 14)){
