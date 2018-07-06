@@ -98,7 +98,7 @@ namespace cryptonote {
     uint64_t base_reward = (TOKEN_SUPPLY - already_generated_coins) >> emission_speed_factor;
     
     const uint64_t premine = 1260000000000U;
-    if (height == 1 && already_generated_coins < premine) {
+    if (height == 1 && already_generated_coins > 0) {
       reward = premine;
       return true;
     }
