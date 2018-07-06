@@ -1103,9 +1103,11 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
   size_t targetV2 = DIFFICULTY_TARGET_V2;
   if(get_current_hard_fork_version() < 2){
     return next_difficulty(timestamps, cumulative_difficulties, target);
-  } else if(get_current_hard_fork_version() < 9){
+  } 
+  else if(get_current_hard_fork_version() < 9){
     return next_difficulty_v2(timestamps, cumulative_difficulties, targetV2);
-  } else if(get_current_hard_fork_version() <= 11){
+  } 
+  else if(get_current_hard_fork_version() <= 11){
     return next_difficulty_v3(timestamps, cumulative_difficulties, targetV2);
   }
   else{
