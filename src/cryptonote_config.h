@@ -70,7 +70,7 @@
 #define CRYPTONOTE_DISPLAY_DECIMAL_POINT                2
 
 #define FEE_PER_KB_OLD                                  ((uint64_t)10) // .1 * pow(10, 1)
-#define FEE_PER_KB_V2                                   ((uint64_t)40) // .4 * pow(10, 1)
+#define FEE_PER_KB_V2                                   ((uint64_t)7500) // 75 ETNX
 #define FEE_PER_KB_V4                                   FEE_PER_KB_V2 // used for alias
 #define FEE_PER_KB                                      ((uint64_t)5000) // 50 * pow(10, 2)
 #define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)2500) // .1 * pow(10, 1)
