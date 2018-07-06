@@ -228,10 +228,16 @@ namespace cryptonote
     std::vector<std::string> records;
 
     // All four MoneroPulse domains have DNSSEC on and valid
-    static const std::vector<std::string> dns_urls = { "checkpoints.stellite.io"
+    static const std::vector<std::string> dns_urls = { "checkpoints.electroneropulse.com", 
+						       "checkpoints.electroneropulse.org", 
+						       "checkpoints.electroneropulse.net", 
+						       "checkpoints.electroneropulse.info"
     };
 
-    static const std::vector<std::string> testnet_dns_urls = { "testpoints.stellite.io"
+    static const std::vector<std::string> testnet_dns_urls = { "testpoints.electroneropulse.com", 
+						               "testpoints.electroneropulse.org", 
+						               "testpoints.electroneropulse.net", 
+						               "testpoints.electroneropulse.info"
     };
 
     if (!tools::dns_utils::load_txt_records_from_dns(records, testnet ? testnet_dns_urls : dns_urls))
