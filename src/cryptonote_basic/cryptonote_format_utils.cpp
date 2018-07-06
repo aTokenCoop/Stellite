@@ -550,7 +550,7 @@ namespace cryptonote
     switch (std::atomic_load(&default_decimal_point))
     {
       case 2:
-        return "stellite";
+        return "electronero";
     case 0:
         return "scent";
       default:

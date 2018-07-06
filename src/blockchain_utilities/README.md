@@ -1,4 +1,4 @@
-# Stellite Blockchain Utilities
+# Electronero Blockchain Utilities
 
 Copyright (c) 2014-2017, The Monero Project
 Copyright (c) 2018-2019, The Stellite Project
@@ -13,16 +13,16 @@ See also each utility's "--help" option.
 
 ### Export an existing blockchain database
 
-`$ stellite-blockchain-export`
+`$ electronero-blockchain-export`
 
 This loads the existing blockchain and exports it to `$MONERO_DATA_DIR/export/blockchain.raw`
 
 ### Import the exported file
 
-`$ stellite-blockchain-import`
+`$ electronero-blockchain-import`
 
 This imports blocks from `$MONERO_DATA_DIR/export/blockchain.raw` (exported using the
-`stellite-blockchain-export` tool as described above) into the current database.
+`electronero-blockchain-export` tool as described above) into the current database.
 
 Defaults: `--batch on`, `--batch size 20000`, `--verify on`
 
@@ -31,14 +31,14 @@ Batch size refers to number of blocks and can be adjusted for performance based 
 Verification should only be turned off if importing from a trusted blockchain.
 
 If you encounter an error like "resizing not supported in batch mode", you can just re-run
-the `stellite-blockchain-import` command again, and it will restart from where it left off.
+the `electronero-blockchain-import` command again, and it will restart from where it left off.
 
 ```bash
 ## use default settings to import blockchain.raw into database
-$ stellite-blockchain-import
+$ electronero-blockchain-import
 
 ## fast import with large batch size, database mode "fastest", verification off
-$ stellite-blockchain-import --batch-size 20000 --database lmdb#fastest --verify off
+$ electronero-blockchain-import --batch-size 20000 --database lmdb#fastest --verify off
 
 ```
 
@@ -81,9 +81,9 @@ LMDB flags (more than one may be specified):
 ## Examples:
 
 ```
-$ stellite-blockchain-import --database lmdb#fastest
+$ electronero-blockchain-import --database lmdb#fastest
 
-$ stellite-blockchain-import --database lmdb#nosync
+$ electronero-blockchain-import --database lmdb#nosync
 
-$ stellite-blockchain-import --database lmdb#nosync,nometasync
+$ electronero-blockchain-import --database lmdb#nosync,nometasync
 ```

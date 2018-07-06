@@ -1,17 +1,17 @@
 [Unit]
-Description=Stellite Full Node
+Description=Electronero Full Node
 After=network.target
 
 [Service]
-User=stellite
-Group=stellite
+User=electronero
+Group=electronero
 WorkingDirectory=~
 
 Type=forking
-PIDFile=/var/run/stellited.pid
+PIDFile=/var/run/electronerod.pid
 
-ExecStart=/usr/bin/stellited --config-file /etc/stellited.conf \
-    --detach --pidfile /var/run/stellited.pid
+ExecStart=/usr/bin/electronerod --config-file /etc/electronerod.conf \
+    --detach --pidfile /var/run/electronerod.pid
 
 [Install]
 WantedBy=multi-user.target
