@@ -508,7 +508,7 @@ bool simple_wallet::set_default_ring_size(const std::vector<std::string> &args/*
       return true;
     }
 
-    if(ring_size > 15){
+    if(ring_size > MAX_MIXIN){
       fail_msg_writer() << tr("Maximum ringsize allowed is 15 since V4 hardfork.");
       return true;
     }
@@ -1603,7 +1603,7 @@ bool simple_wallet::new_wallet(const boost::program_options::variables_map& vm,
     tr("Your wallet has been generated!\n"
     "To start synchronizing with the daemon, use \"refresh\" command.\n"
     "Use \"help\" command to see the list of available commands.\n"
-    "Always use \"exit\" command when closing stellite-wallet-cli to save your\n"
+    "Always use \"exit\" command when closing electronero-wallet-cli to save your\n"
     "current session's state. Otherwise, you might need to synchronize \n"
     "your wallet again (your wallet keys are NOT at risk in any case).\n")
   ;
@@ -2357,7 +2357,7 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
   size_t fake_outs_count;
   if(local_args.size() > 0) {
     size_t ring_size;
-    if(!epee::string_tools::get_xtype_from_string(ring_size, local_args[0]))
+    if(!epee::string_tools::get_xtype_from_string(fake_outs_count, local_args[0]))
     {
       fake_outs_count = m_wallet->default_mixin();
       if (fake_outs_count == 0)
@@ -2365,7 +2365,7 @@ bool simple_wallet::transfer_main(int transfer_type, const std::vector<std::stri
     }
     else
     {
-      if(ring_size > 15){
+      if(ring_size > MAX_MIXIN){
         return false;
       }
       else
@@ -2948,7 +2948,7 @@ bool simple_wallet::sweep_main(uint64_t below, const std::vector<std::string> &a
     }
     else
     {
-      if(ring_size > 15){
+      if(ring_size > MAX_MIXIN){
         return false;
       }
       else
@@ -3230,8 +3230,8 @@ bool simple_wallet::donate(const std::vector<std::string> &args_)
      return true;
   }
   std::string ring_size_str;
-  // Hardcode Stellite's donation address (since Carbon V2 v1.2.3.2)
-  const std::string address_str = "Se321oJNkfaGrN89Vmq6qGZb8587L53u2NVZbCrhhJujemaGMVNmr952oEsQAKGFojevSWDNcJK8GS8Sy4manyrG2okoPyvfa";
+  // Hardcode electronero's donation address 
+  const std::string address_str = "etnk3syEMiM2JXreueGrpn4D2AEGLBiij7BtUBgH6sPXimyDTc2LMERUHpDwvxiiu1dG98qStu7jZJv4dWw2zKYe33vFXyToTp";
   std::string amount_str;
   std::string payment_id_str;
   // check payment id
@@ -3258,7 +3258,7 @@ bool simple_wallet::donate(const std::vector<std::string> &args_)
   local_args.push_back(amount_str);
   if (!payment_id_str.empty())
     local_args.push_back(payment_id_str);
-  message_writer() << tr("Donating ") << amount_str << " XTL to The Stellite Project (stellite.cash).";
+  message_writer() << tr("Donating ") << amount_str << " ETNX to The Electronero Project (electronero.org).";
   transfer_new(local_args);
   return true;
 }
@@ -5075,10 +5075,10 @@ int main(int argc, char* argv[])
 
   const auto vm = wallet_args::main(
    argc, argv,
-   "stellite-wallet-cli [--wallet-file=<file>|--generate-new-wallet=<file>] [<COMMAND>]",
+   "electronero-wallet-cli [--wallet-file=<file>|--generate-new-wallet=<file>] [<COMMAND>]",
     desc_params,
     positional_options,
-    "stellite-wallet-cli.log"
+    "electronero-wallet-cli.log"
   );
 
   if (!vm)
